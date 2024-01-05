@@ -3,6 +3,25 @@
 #include <string.h>
 #include <getopt.h>
 
+#include "mapgen.h"
+
+// LINE_VERTICAL:│
+// LINE_HORIZONTAL:─
+// LINE_DOWN_RIGHT:┌
+// LINE_DOWN_LEFT:┐
+// LINE_UP_RIGHT:└
+// LINE_UP_LEFT:┘
+// SQUARE_WHITE: 
+// SQUARE_BLACK:█
+// ARROW_NORTH_WHITE:△
+// ARROW_NORTH_BLACK:▲
+// ARROW_EAST_WHITE:▷
+// ARROW_EAST_BLACK:▶
+// ARROW_SOUTH_WHITE:▽
+// ARROW_SOUTH_BLACK:▼
+// ARROW_WEST_WHITE:◁
+// ARROW_WEST_BLACK:◀
+
 int main(int argc, char **argv){
     //deklaracja zmiennych
     int szerokosc = 0;
@@ -14,20 +33,31 @@ int main(int argc, char **argv){
     char plik_mapy[100] = "mapa.txt";
     double procent_zapelnienia = 0;
     int ilosc_czarnych = 0;
-
-
+    char mapa_z_pliku = '0';
 
     //obłsługa argumentów
     int opt;
-    while((opt = getopt(argc, argv, "hs:w:i:k:z:o:p:l:")) != -1){
+    while((opt = getopt(argc, argv, "hs:w:i:k:z:o:p:c:")) != -1){
         switch(opt){
             case 's':
+                if (atoi(optarg) < 1){
+                    printf("Szerokość nie może być mniejsza od 1 - koniec działania programu\n");
+                    return 0;
+                }
                 szerokosc = atoi(optarg);
                 break;
             case 'w':
+                if (atoi(optarg) < 1){
+                    printf("Wysokość nie może być mniejsza od 1 - koniec działania programu\n");
+                    return 0;
+                }
                 wysokosc = atoi(optarg);
                 break;
             case 'i':
+                if (atoi(optarg) < 1){
+                    printf("Liczba iteracji nie może być mniejsza od 1 - koniec działania programu\n");
+                    return 0;
+                }
                 iteracje = atoi(optarg);
                 break;
             case 'k':
@@ -59,6 +89,7 @@ int main(int argc, char **argv){
                     if (optarg != NULL) {
                         strncpy(nazwa_pliku_wyjsciowego, optarg, sizeof(nazwa_pliku_wyjsciowego) - 1);
                         nazwa_pliku_wyjsciowego[sizeof(nazwa_pliku_wyjsciowego) - 1] = '\0';
+                        mapa_z_pliku = '1';
                         break;
                     }else{
                         printf("Błąd określeniu miejsca do wypisania");
@@ -71,31 +102,48 @@ int main(int argc, char **argv){
                         plik_mapy[sizeof(plik_mapy) - 1] = '\0';
                         break;
                     }else{
-                        printf("Błąd określeniu miejsca do wypisania");
+                        printf("Błąd określenia pliku źródłowego mapy");
                         break;
                     }
-            case 'p': //procent czarnych pól
+            case 'c': //procent lub ilosc czarnych pól
                 if(optarg != NULL){
-                    procent_zapelnienia = atof(optarg);
+                    //jeżeli ostatni znak to %, to parametr przekazany do zmiennej procentowej, jeżeli brak procenta parametr traktowany jako ilość całkowita
+                    if (optarg[strlen(optarg) - 1] == '%'){
+                        optarg[strlen(optarg) - 1] = '\0';
+                        procent_zapelnienia = atof(optarg);
+                        //printf("procent %f \n", procent_zapelnienia);
+                    } else{
+                        ilosc_czarnych = atof(optarg);
+                        //printf("liczba %d \n", ilosc_czarnych);
+                    }
                     break;
                 } else{
-                    printf("Nieprawidłowy procent\n");
+                    printf("Nieprawidłowy parametr ilosci czarnych pól\n");
                     return 0;
-                }
-            case 'l': //liczba czarnych pól
-                if(optarg != NULL){
-                    ilosc_czarnych = atoi(optarg);
-                    break;
-                } else{
-                    printf("Nieprawidłowa ilość pól\n");
-                    return 0;
-                }
-                
+                }                
         }
     }
 
     //test wczytania parametrów
     printf("%d %d %d %c %s %s %d %lf\n", szerokosc, wysokosc, iteracje, kierunek, nazwa_pliku_wyjsciowego, plik_mapy, ilosc_czarnych, procent_zapelnienia);
+
+    
+    if (mapa_z_pliku == '1'){
+        //wczytanie mapy z pliku i ustawienie rozmiarów planszy
+    } else{
+        //generowanie mapy
+
+        //deklaracja mapy
+        char mapa[szerokosc+2][wysokosc+2]; //+2 na krawędzie mapy
+
+        //generowanie mapy
+        generuj_mape(&mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
+
+
+
+
+    }
+
 
     return 0;
 }
