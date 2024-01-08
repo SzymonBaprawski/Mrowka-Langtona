@@ -4,6 +4,7 @@
 #include <getopt.h>
 
 #include "mapgen.h"
+#include "mapout.h"
 
 // LINE_VERTICAL:│
 // LINE_HORIZONTAL:─
@@ -21,6 +22,23 @@
 // ARROW_SOUTH_BLACK:▼
 // ARROW_WEST_WHITE:◁
 // ARROW_WEST_BLACK:◀
+
+
+char** alokujMape(int wysokosc, int szerokosc) {
+    char** mapa = (char**)malloc(wysokosc * sizeof(char*));
+    for (int i = 0; i < wysokosc; i++) {
+        mapa[i] = (char*)malloc(szerokosc * sizeof(char));
+    }
+    return mapa;
+}
+
+void zwolnijMape(char** mapa, int wysokosc) {
+    for (int i = 0; i < wysokosc; i++) {
+        free(mapa[i]);
+    }
+    free(mapa);
+}
+
 
 int main(int argc, char **argv){
     //deklaracja zmiennych
@@ -127,6 +145,14 @@ int main(int argc, char **argv){
     //test wczytania parametrów
     printf("%d %d %d %c %s %s %d %lf\n", szerokosc, wysokosc, iteracje, kierunek, nazwa_pliku_wyjsciowego, plik_mapy, ilosc_czarnych, procent_zapelnienia);
 
+    //sprawdzenie paramtrów
+
+    if (mapa_z_pliku != '1'){
+        if (szerokosc == 0 || wysokosc == 0){
+            printf("Koniec programu - brak wystarczających informacji o wymiarach mapy\n");
+            return 1;
+        }
+    }
     
     if (mapa_z_pliku == '1'){
         //wczytanie mapy z pliku i ustawienie rozmiarów planszy
@@ -134,13 +160,11 @@ int main(int argc, char **argv){
         //generowanie mapy
 
         //deklaracja mapy
-        char mapa[szerokosc+2][wysokosc+2]; //+2 na krawędzie mapy
+
+        char** mapa = alokujMape(wysokosc+2, szerokosc+2);
 
         //generowanie mapy
-        generuj_mape(&mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
-
-
-
+        zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
 
     }
 
