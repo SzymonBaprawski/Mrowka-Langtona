@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <wchar.h>
+#include <locale.h>
 
 #include "mapgen.h"
 #include "mapout.h"
@@ -24,15 +26,15 @@
 // ARROW_WEST_BLACK:◀
 
 
-char** alokujMape(int wysokosc, int szerokosc) {
-    char** mapa = (char**)malloc(wysokosc * sizeof(char*));
+wchar_t** alokuj_mape(int szerokosc, int wysokosc) {
+    wchar_t** mapa = (wchar_t**)malloc(wysokosc * sizeof(wchar_t*));
     for (int i = 0; i < wysokosc; i++) {
-        mapa[i] = (char*)malloc(szerokosc * sizeof(char));
+        mapa[i] = (wchar_t*)malloc(szerokosc * sizeof(wchar_t));
     }
     return mapa;
 }
 
-void zwolnijMape(char** mapa, int wysokosc) {
+void zwolnij_mape(wchar_t** mapa, int wysokosc) {
     for (int i = 0; i < wysokosc; i++) {
         free(mapa[i]);
     }
@@ -52,6 +54,9 @@ int main(int argc, char **argv){
     double procent_zapelnienia = 0;
     int ilosc_czarnych = 0;
     char mapa_z_pliku = '0';
+
+    //ustawienie lokalizacji
+    setlocale(LC_ALL, "C.UTF-8");
 
     //obłsługa argumentów
     int opt;
@@ -157,17 +162,24 @@ int main(int argc, char **argv){
     if (mapa_z_pliku == '1'){
         //wczytanie mapy z pliku i ustawienie rozmiarów planszy
     } else{
-        //generowanie mapy
-
-        //deklaracja mapy
-
-        char** mapa = alokujMape(wysokosc+2, szerokosc+2);
-
-        //generowanie mapy
-        zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
-
+        
+        szerokosc += 2; //+2 na krawędzie
+        wysokosc += 2;
     }
 
+    //alokacja pamięci na mapę
+    wchar_t **mapa = alokuj_mape(szerokosc, wysokosc);
 
+    //generowanie mapy
+    generuj_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
+
+    //zapelnienie mapy czarnymi polami
+
+    //wypisanie mapy
+    wypisz_mape(mapa, szerokosc, wysokosc);
+
+    //zwolnienie pamięci
+    zwolnij_mape(mapa, wysokosc);
+    
     return 0;
 }
