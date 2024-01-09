@@ -30,24 +30,38 @@ void generuj_mape(wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnyc
     
 }
 
-void zapelnij_mape(wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych, int procent_zapelnienia){
+void zapelniacz(wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych){
     //generator liczb losowych
     srand(time(NULL));
-    if (ilosc_czarnych > procent_zapelnienia){
-        //generowania wg ilosci czarnych pól
 
-        printf("%d\n", ilosc_czarnych);
+    printf("Ilość czarnych pól: %d\n", ilosc_czarnych);
 
-    } else{
-        //generowanie wg % zapełnienia
+    while (ilosc_czarnych > 0){
+        int x = rand() % szerokosc;
+        int y = rand() % wysokosc;
 
-        float tmp = szerokosc * wysokosc;
-        tmp *= procent_zapelnienia;
-        tmp = tmp / 100;
-        int ilosc = (int)tmp;
-
-        printf("%d\n", ilosc);
-
+        if (mapa[x][y] == L' '){
+            mapa[x][y] = L'█';
+            ilosc_czarnych--;
+        }
     }
+    
+}
 
+void zapelnij_mape(wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych, int procent_zapelnienia){
+    //zapelnianie mapy czarnymi polami
+    if (procent_zapelnienia == 0){
+        int ilosc_pol = (szerokosc-2)*(wysokosc-2);
+        if (ilosc_czarnych > ilosc_pol){
+            printf("Liczba czarnych pól jest większa niż liczba pól na mapie\n");
+            printf("Zmniejszono liczbę czarnych pól do maksymalnej możliwej\n");
+            ilosc_czarnych = ilosc_pol;
+        }
+        zapelniacz(mapa, szerokosc, wysokosc, ilosc_czarnych);
+    }
+    else{
+        int ilosc_pol = (szerokosc-2)*(wysokosc-2);
+        ilosc_czarnych = (ilosc_pol*procent_zapelnienia)/100;
+        zapelniacz(mapa, szerokosc, wysokosc, ilosc_czarnych);
+    }
 }

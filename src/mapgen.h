@@ -5,5 +5,6 @@
 //generator mapy
 void generuj_mape (wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych, int procent_zapelnienia);
 void zapelnij_mape (wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych, int procent_zapelnienia);
+void zapelniacz (wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych);
 
 #endif

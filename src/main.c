@@ -162,7 +162,6 @@ int main(int argc, char **argv){
     if (mapa_z_pliku == '1'){
         //wczytanie mapy z pliku i ustawienie rozmiarów planszy
     } else{
-        
         szerokosc += 2; //+2 na krawędzie
         wysokosc += 2;
     }
@@ -174,6 +173,7 @@ int main(int argc, char **argv){
     generuj_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
 
     //zapelnienie mapy czarnymi polami
+    zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
 
     //wypisanie mapy
     wypisz_mape(mapa, szerokosc, wysokosc);
