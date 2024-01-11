@@ -8,6 +8,7 @@
 #include "mapaloc.h"
 #include "mapgen.h"
 #include "mapout.h"
+#include "help.h"
 
 // LINE_VERTICAL:│
 // LINE_HORIZONTAL:─
@@ -30,7 +31,7 @@ int main(int argc, char **argv){
     //deklaracja zmiennych
     int szerokosc = 0;
     int wysokosc = 0;
-    int iteracje = 0;
+    int iteracje = 1;
     char wyjscie = 's';
     char nazwa_pliku_wyjsciowego[100] = "iteracja: ";
     char kierunek = 'N'; //North, East, South, East
@@ -44,7 +45,7 @@ int main(int argc, char **argv){
 
     //obłsługa argumentów
     int opt;
-    while((opt = getopt(argc, argv, "hs:w:i:k:z:o:p:c:")) != -1){
+    while((opt = getopt(argc, argv, "hs:w:i:k:z:o:c:")) != -1){
         switch(opt){
             case 's':
                 if (atoi(optarg) < 1){
@@ -85,7 +86,8 @@ int main(int argc, char **argv){
                     return 0;
                 }
             case 'h':
-                //wyświetelenie pomocy
+                pomoc();
+                return 1;
                 break;
             case 'o':
                 if (optarg != NULL && (strcasecmp(optarg, "stdout") == 0)) {
@@ -131,36 +133,46 @@ int main(int argc, char **argv){
         }
     }
 
-    //test wczytania parametrów
-    printf("%d %d %d %c %s %s %d %lf\n", szerokosc, wysokosc, iteracje, kierunek, nazwa_pliku_wyjsciowego, plik_mapy, ilosc_czarnych, procent_zapelnienia);
+    //test wczytania wszystkich parametrów
+    printf("Szerokość: %d\n", szerokosc);
+    printf("Wysokość: %d\n", wysokosc);
+    printf("Ilość iteracji: %d\n", iteracje);
+    printf("Kierunek: %c\n", kierunek);
+    printf("Wyjście: %c\n", wyjscie);
+    printf("Nazwa pliku wyjściowego: %s\n", nazwa_pliku_wyjsciowego);
+    printf("Plik mapy: %s\n", plik_mapy);
+    printf("Procent zapelnienia: %f\n", procent_zapelnienia);
+    printf("Ilość czarnych pól: %d\n", ilosc_czarnych);
+    printf("Mapa z pliku: %c\n", mapa_z_pliku);
 
     //sprawdzenie paramtrów
 
-    if (mapa_z_pliku != '1'){
-        if (szerokosc == 0 || wysokosc == 0){
-            printf("Koniec programu - brak wystarczających informacji o wymiarach mapy\n");
-            return 1;
-        }
-    }
-    
+    wchar_t **mapa;
+
     if (mapa_z_pliku == '1'){
-        //wczytanie mapy z pliku i ustawienie rozmiarów planszy
-    } else{
+            //wczytanie mapy z pliku i ustawienie rozmiarów planszy
+
+    } else if (szerokosc == 0 || wysokosc == 0  ){
         szerokosc += 2; //+2 na krawędzie
         wysokosc += 2;
+
+        //alokacja pamięci na mapę
+        mapa = alokuj_mape(szerokosc, wysokosc);
+
+        //generowanie mapy
+        generuj_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
+
+        //zapelnienie mapy czarnymi polami
+        zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
     }
 
-    //alokacja pamięci na mapę
-    wchar_t **mapa = alokuj_mape(szerokosc, wysokosc);
 
-    //generowanie mapy
-    generuj_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
 
-    //zapelnienie mapy czarnymi polami
-    zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
+    for (int i = 0; i < iteracje; i++){
+        wypisz_mape(mapa, szerokosc, wysokosc);
+        //generowanie kolejnej iteracji
+    }
 
-    //wypisanie mapy
-    wypisz_mape(mapa, szerokosc, wysokosc);
 
     //zwolnienie pamięci
     zwolnij_mape(mapa, wysokosc);
