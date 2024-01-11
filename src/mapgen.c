@@ -36,17 +36,18 @@ void zapelniacz(wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych)
 
     printf("Ilość czarnych pól: %d\n", ilosc_czarnych);
 
-    while (ilosc_czarnych > 0){
-        int x = rand() % szerokosc;
-        int y = rand() % wysokosc;
-
-        if (mapa[x][y] == L' '){
-            mapa[x][y] = L'█';
+    //zapelnianie mapy czarnymi polami
+    while(ilosc_czarnych > 0){
+        int x = rand() % (szerokosc-2) + 1;
+        int y = rand() % (wysokosc-2) + 1;
+        if (mapa[y][x] == L' '){
+            mapa[y][x] = L'█';
+        
             ilosc_czarnych--;
         }
     }
-    
 }
+
 
 void zapelnij_mape(wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych, int procent_zapelnienia){
     //zapelnianie mapy czarnymi polami

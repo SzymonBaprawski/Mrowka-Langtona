@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <wchar.h>
+#include "malloc.h"
 
 wchar_t** alokuj_mape(int szerokosc, int wysokosc) {
     wchar_t** mapa = (wchar_t**)malloc(wysokosc * sizeof(wchar_t*));

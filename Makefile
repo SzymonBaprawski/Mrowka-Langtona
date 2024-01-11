@@ -28,4 +28,4 @@ $(shell mkdir -p $(BINDIR))
 
 # Reguła czyszczenia plików tymczasowych i programu
 clean:
-	rm -rf $(BINDIR)/*
+	rm -rf $(BINDIR)/run
