@@ -6,6 +6,9 @@
 #define KOD_MROWKA_H
 
 #include <stdio.h>
+#include <wchar.h>
+#include <locale.h>
+
 
 enum ways {N,S,E,W};
 

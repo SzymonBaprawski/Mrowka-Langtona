@@ -1,6 +1,7 @@
 #include "mrowka.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <wchar.h>
 
 void mrowkaStart(struct mrowka m, int a, int b, enum ways w){
     m.x = a;
