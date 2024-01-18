@@ -1,0 +1,14 @@
+Sposób użycia:
+Opis wszystkich flag wyświetlony po użyciu flagi -h:
+-h - wyświetla pomoc
+-w - określa wysokość mapy - parametr wymagany jeżeli nie wczytuje się mapy z pliku 
+-s - określa szerokość mapy - parametr wymagany jeżeli nie wczytuje się mapy z pliku
+-i - określa liczbę iteracji - domyślna wartość  1
+-k - określa w którą stronę na początku będzie skierowana mrówka - parametr wymagany jeżeli nie wczytuje się mapy z pliku
+-o - określa schemat nazywania plików wyjściowych - parametr opcjonalny - wartość domyślna stdout
+-z - określa plik z którego ma być wczytana mapa - parametr opcjonalny - jeżeli nie podany program generuje mapę wg. parametrów
+-c - określa procent lub ilość czarnych pól na mapie - parametr wymagany jeżeli nie wczytuje się mapy z pliku
+Jeżeli podano parametr -z, to parametry -w, -s, -c,-k są ignorowane
+Jeżeli podano parametr -c, to parametr -z jest ignorowany
+Przykładowe wywołanie programu: ./run -w 10 -s 10 -i 100 -k n -o stdout -c 50
+Program wygeneruje mapę o wymiarach 10x10, wykona 100 iteracji, mrówka będzie skierowana
