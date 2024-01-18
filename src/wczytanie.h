@@ -8,6 +8,6 @@
 #define MAX_ROWS 1000
 #define MAX_COLUMNS 1000
 
-int wczytanieMapy(char *nazwa, wchar_t mapa[MAX_ROWS][MAX_COLUMNS], int rows, int columns);
+int wczytanieMapy(char *nazwa, wchar_t mapa[MAX_ROWS][MAX_COLUMNS], int *rows, int *columns);
 
 #endif //SRC_WCZYTANIE_H
