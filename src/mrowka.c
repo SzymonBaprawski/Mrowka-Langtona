@@ -9,7 +9,7 @@ void mrowkaStart(struct mrowka m, int a, int b, enum ways w){
     m.way = w;
 }
 void moveMrowka(struct mrowka m, wchar_t **mapa){
-    if(mapa[m.x][m.y]==L'█'){
+    if(mapa[m.x][m.y]==L'▲'||mapa[m.x][m.y]==L'▼'||mapa[m.x][m.y]==L'◀'||mapa[m.x][m.y]==L'▶'){
         switch (m.way) {
             case N:
                 m.way = W;
@@ -30,7 +30,7 @@ void moveMrowka(struct mrowka m, wchar_t **mapa){
 
             
         }
-    }else if(mapa[m.x][m.y]==L' '){
+    }else if(mapa[m.x][m.y]==L'△'||mapa[m.x][m.y]==L'▽'||mapa[m.x][m.y]==L'◁'||mapa[m.x][m.y]==L'▷'){
         switch (m.way) {
             case N:
                 m.way = E;
