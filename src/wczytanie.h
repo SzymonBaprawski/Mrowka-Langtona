@@ -5,9 +5,12 @@
 #ifndef SRC_WCZYTANIE_H
 #define SRC_WCZYTANIE_H
 #include <wchar.h>
-#define MAX_ROWS 1000
-#define MAX_COLUMNS 1000
+#include <locale.h>
 
-int wczytanieMapy(char *nazwa, wchar_t mapa[MAX_ROWS][MAX_COLUMNS], int *rows, int *columns);
+int wymiary(char *nazwa, int *szerokosc, int *wysokosc);
+
+void wczytanieMapy(char *nazwa, wchar_t **mapa, int *szerokosc, int *wysokosc);
+
+void znajdz_mrowke(wchar_t **mapa, int szerokosc, int wysokosc, int *x, int *y, char *kierunek);
 
 #endif //SRC_WCZYTANIE_H

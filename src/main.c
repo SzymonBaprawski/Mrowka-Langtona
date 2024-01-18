@@ -41,8 +41,8 @@ int main(int argc, char **argv){
     double procent_zapelnienia = 0;
     int ilosc_czarnych = 0;
     char mapa_z_pliku = '0';
-    int mrowka_x = 1;
-    int mrowka_y = 1;
+    int mrowka_x = 0;
+    int mrowka_y = 0;
 
 
     //ustawienie lokalizacji
@@ -103,7 +103,6 @@ int main(int argc, char **argv){
                     if (optarg != NULL) {
                         strncpy(nazwa_pliku_wyjsciowego, optarg, sizeof(nazwa_pliku_wyjsciowego) - 1);
                         nazwa_pliku_wyjsciowego[sizeof(nazwa_pliku_wyjsciowego) - 1] = '\0';
-                        mapa_z_pliku = '1';
                         break;
                     }else{
                         printf("Błąd określeniu miejsca do wypisania");
@@ -156,9 +155,35 @@ int main(int argc, char **argv){
     wchar_t **mapa;
 
     if (mapa_z_pliku == '1'){
+        if (wymiary(plik_mapy, &szerokosc, &wysokosc) == 1){
+            printf("Nie można otworzyć pliku - koniec działania programu\n");
+            return 0;
+        }
+        szerokosc += 2; //+2 na krawędzie
+        wysokosc += 2; //+2 na krawędzie
+
+        mapa = alokuj_mape(szerokosc, wysokosc);
         wczytanieMapy(plik_mapy, mapa, &szerokosc, &wysokosc);
-        printf("Szerokość: %d\n", szerokosc);
-        printf("Wysokość: %d\n", wysokosc);
+
+        //znalezienie mrówki na mapie, jeżeli jej nie ma, to ustawienie jej na środku
+        znajdz_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek);
+        if (mrowka_x == 0 && mrowka_y == 0){
+            mrowka_x = szerokosc/2;
+            mrowka_y = wysokosc/2;
+        } else if (mapa[mrowka_y][mrowka_x] == L'▲' || mapa[mrowka_y][mrowka_x] == L'▶' || mapa[mrowka_y][mrowka_x] == L'▼' || mapa[mrowka_y][mrowka_x] == L'◀'){
+            mapa[mrowka_y][mrowka_x] = L'█';
+        } else if (mapa[mrowka_y][mrowka_x] == L'△' || mapa[mrowka_y][mrowka_x] == L'▷' || mapa[mrowka_y][mrowka_x] == L'▽' || mapa[mrowka_y][mrowka_x] == L'◁'){
+            mapa[mrowka_y][mrowka_x] = L' ';
+        }
+
+        wypisz_mape_z_pliku(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
+        for (int i = 0; i < iteracje; i++){
+          if (przesun_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek) == 1){
+              printf("Mrowka wyszla poza mape - koniec programu\n");
+              return 0;
+          }
+        wypisz_mape_z_pliku(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
+    }
 
     } else if (szerokosc != 0 && wysokosc != 0  ){
         szerokosc += 2; //+2 na krawędzie
@@ -172,21 +197,22 @@ int main(int argc, char **argv){
 
         //zapelnienie mapy czarnymi polami
         zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
-    }
-    mrowka_x = wysokosc/2;
-    mrowka_y = szerokosc/2;
 
+        mrowka_x = szerokosc/2;
+        mrowka_y = wysokosc/2;
 
-
-    wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
-    for (int i = 0; i < iteracje; i++){
-        if (przesun_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek) == 1){
-            printf("Mrowka wyszla poza mape - koniec programu\n");
-            return 0;
-        }
         wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
+        for (int i = 0; i < iteracje; i++){
+            if (przesun_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek) == 1){
+                printf("Mrowka wyszla poza mape - koniec programu\n");
+                return 0;
+            }
+        wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
+        }
+    } else{
+        printf("Nie podano wymiarów mapy - koniec działania programu\n");
+        return 0;
     }
-
 
     //zwolnienie pamięci
     zwolnij_mape(mapa, wysokosc);
