@@ -30,9 +30,9 @@
 
 int main(int argc, char **argv){
     //deklaracja zmiennych
+    int iteracje = 1;
     int szerokosc = 0;
     int wysokosc = 0;
-    int iteracje = 1;
     char wyjscie = 's';
     char nazwa_pliku_wyjsciowego[100] = "iteracja: ";
     char kierunek = 'N'; //North, East, South, East
@@ -40,7 +40,10 @@ int main(int argc, char **argv){
     double procent_zapelnienia = 0;
     int ilosc_czarnych = 0;
     char mapa_z_pliku = '0';
-    struct mrowka mrowka;
+    struct mrowka m;
+    m.x=0;
+    m.y=0;
+    m.way=N;
     enum ways way = N;
 
 
@@ -156,9 +159,7 @@ int main(int argc, char **argv){
     if (mapa_z_pliku == '1'){
             //wczytanie mapy z pliku i ustawienie rozmiarów planszy
 
-    } else if (szerokosc == 0 || wysokosc == 0  ){
-        int x = szerokosc/2;
-        int y = wysokosc/2;
+    } else if (szerokosc != 0 && wysokosc != 0  ){
         szerokosc += 2; //+2 na krawędzie
         wysokosc += 2;
 
@@ -170,15 +171,18 @@ int main(int argc, char **argv){
 
         //zapelnienie mapy czarnymi polami
         zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
-        mrowkaStart(mrowka,x,y,)
     }
+    //    //mrowkaStart(m,szerokosc/2,wysokosc/2, way);
+    m.x = szerokosc/2;
+    m.y = wysokosc/2;
+    m.way = way;
 
 
 
     for (int i = 0; i < iteracje; i++){
-        drawMrowka(mrowka, mapa);
+        drawMrowka(m, mapa);
         wypisz_mape(mapa, szerokosc, wysokosc);
-        moveMrowka(mrowka,mapa);
+        moveMrowka(m, mapa);
         //generowanie kolejnej iteracji
     }
 
