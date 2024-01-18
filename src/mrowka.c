@@ -51,7 +51,8 @@ void moveMrowka(struct mrowka m, wchar_t **mapa){
 
 
         }
-    }
+    }else
+        printf("zle");
 }
 void drawMrowka(struct mrowka m, wchar_t **mapa){
     if(mapa[m.x][m.y]==L'█'){
