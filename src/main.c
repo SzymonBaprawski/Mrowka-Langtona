@@ -10,6 +10,7 @@
 #include "mapout.h"
 #include "help.h"
 #include "mrowka.h"
+#include "wczytanie.h"
 
 // LINE_VERTICAL:│
 // LINE_HORIZONTAL:─
@@ -31,7 +32,7 @@
 int main(int argc, char **argv){
     //deklaracja zmiennych
     int iteracje = 1;
-    int szerokosc = 0;
+    int szerokosc =0;
     int wysokosc = 0;
     char wyjscie = 's';
     char nazwa_pliku_wyjsciowego[100] = "iteracja: ";
@@ -113,6 +114,7 @@ int main(int argc, char **argv){
                 if (optarg != NULL) {
                         strncpy(plik_mapy, optarg, sizeof(plik_mapy) - 1);
                         plik_mapy[sizeof(plik_mapy) - 1] = '\0';
+                        mapa_z_pliku = '1';
                         break;
                     }else{
                         printf("Błąd określenia pliku źródłowego mapy");
@@ -154,7 +156,9 @@ int main(int argc, char **argv){
     wchar_t **mapa;
 
     if (mapa_z_pliku == '1'){
-            //wczytanie mapy z pliku i ustawienie rozmiarów planszy
+        wczytanieMapy(plik_mapy, mapa, &szerokosc, &wysokosc);
+        printf("Szerokość: %d\n", szerokosc);
+        printf("Wysokość: %d\n", wysokosc);
 
     } else if (szerokosc != 0 && wysokosc != 0  ){
         szerokosc += 2; //+2 na krawędzie
