@@ -10,7 +10,6 @@
 #include "mapout.h"
 #include "help.h"
 #include "mrowka.h"
-#include "wczytanie.h"
 
 // LINE_VERTICAL:│
 // LINE_HORIZONTAL:─
@@ -32,8 +31,8 @@
 int main(int argc, char **argv){
     //deklaracja zmiennych
     int iteracje = 1;
-    int szerokosc;
-    int wysokosc;
+    int szerokosc = 0;
+    int wysokosc = 0;
     char wyjscie = 's';
     char nazwa_pliku_wyjsciowego[100] = "iteracja: ";
     char kierunek = 'N'; //North, East, South, East
@@ -41,11 +40,8 @@ int main(int argc, char **argv){
     double procent_zapelnienia = 0;
     int ilosc_czarnych = 0;
     char mapa_z_pliku = '0';
-    struct mrowka m;
-    m.x=0;
-    m.y=0;
-    m.way=N;
-    enum ways way = N;
+    int mrowka_x = 1;
+    int mrowka_y = 1;
 
 
     //ustawienie lokalizacji
@@ -117,7 +113,6 @@ int main(int argc, char **argv){
                 if (optarg != NULL) {
                         strncpy(plik_mapy, optarg, sizeof(plik_mapy) - 1);
                         plik_mapy[sizeof(plik_mapy) - 1] = '\0';
-                        mapa_z_pliku = '1';
                         break;
                     }else{
                         printf("Błąd określenia pliku źródłowego mapy");
@@ -158,10 +153,10 @@ int main(int argc, char **argv){
 
     wchar_t **mapa;
 
-    if (mapa_z_pliku == '1')
-        wczytanieMapy(plik_mapy, mapa, szerokosc, wysokosc);
+    if (mapa_z_pliku == '1'){
+            //wczytanie mapy z pliku i ustawienie rozmiarów planszy
 
-    else if (szerokosc != 0 && wysokosc != 0) {
+    } else if (szerokosc != 0 && wysokosc != 0  ){
         szerokosc += 2; //+2 na krawędzie
         wysokosc += 2;
 
@@ -174,14 +169,23 @@ int main(int argc, char **argv){
         //zapelnienie mapy czarnymi polami
         zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
     }
+    mrowka_x = wysokosc/2;
+    mrowka_y = szerokosc/2;
+
+
+
+    wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
     for (int i = 0; i < iteracje; i++){
-        wypisz_mape(mapa, szerokosc, wysokosc);
-        //generowanie kolejnej iteracji
+        if (przesun_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek) == 1){
+            printf("Mrowka wyszla poza mape - koniec programu\n");
+            return 0;
+        }
+        wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
     }
 
 
     //zwolnienie pamięci
-    //zwolnij_mape(mapa, wysokosc);
+    zwolnij_mape(mapa, wysokosc);
     
     return 0;
 }
