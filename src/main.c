@@ -9,6 +9,7 @@
 #include "mapgen.h"
 #include "mapout.h"
 #include "help.h"
+#include "mrowka.h"
 
 // LINE_VERTICAL:│
 // LINE_HORIZONTAL:─
@@ -39,6 +40,9 @@ int main(int argc, char **argv){
     double procent_zapelnienia = 0;
     int ilosc_czarnych = 0;
     char mapa_z_pliku = '0';
+    struct mrowka mrowka;
+    enum ways way = N;
+
 
     //ustawienie lokalizacji
     setlocale(LC_ALL, "C.UTF-8");
@@ -153,6 +157,8 @@ int main(int argc, char **argv){
             //wczytanie mapy z pliku i ustawienie rozmiarów planszy
 
     } else if (szerokosc == 0 || wysokosc == 0  ){
+        int x = szerokosc/2;
+        int y = wysokosc/2;
         szerokosc += 2; //+2 na krawędzie
         wysokosc += 2;
 
@@ -164,12 +170,15 @@ int main(int argc, char **argv){
 
         //zapelnienie mapy czarnymi polami
         zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
+        mrowkaStart(mrowka,x,y,)
     }
 
 
 
     for (int i = 0; i < iteracje; i++){
+        drawMrowka(mrowka, mapa);
         wypisz_mape(mapa, szerokosc, wysokosc);
+        moveMrowka(mrowka,mapa);
         //generowanie kolejnej iteracji
     }
 
