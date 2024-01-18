@@ -40,11 +40,8 @@ int main(int argc, char **argv){
     double procent_zapelnienia = 0;
     int ilosc_czarnych = 0;
     char mapa_z_pliku = '0';
-    struct mrowka m;
-    m.x=0;
-    m.y=0;
-    m.way=N;
-    enum ways way = N;
+    int mrowka_x = 1;
+    int mrowka_y = 1;
 
 
     //ustawienie lokalizacji
@@ -172,18 +169,18 @@ int main(int argc, char **argv){
         //zapelnienie mapy czarnymi polami
         zapelnij_mape(mapa, szerokosc, wysokosc, ilosc_czarnych, procent_zapelnienia);
     }
-    //    //mrowkaStart(m,szerokosc/2,wysokosc/2, way);
-    m.x = szerokosc/2;
-    m.y = wysokosc/2;
-    m.way = way;
+    mrowka_x = wysokosc/2;
+    mrowka_y = szerokosc/2;
 
 
 
+    wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
     for (int i = 0; i < iteracje; i++){
-        drawMrowka(m, mapa);
-        wypisz_mape(mapa, szerokosc, wysokosc);
-        moveMrowka(m, mapa);
-        //generowanie kolejnej iteracji
+        if (przesun_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek) == 1){
+            printf("Mrowka wyszla poza mape - koniec programu\n");
+            return 0;
+        }
+        wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
     }
 
 

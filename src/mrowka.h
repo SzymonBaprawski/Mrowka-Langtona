@@ -10,14 +10,6 @@
 #include <locale.h>
 
 
-enum ways {N,S,E,W};
-
-struct mrowka {
-    enum ways way;
-    int x,y;
-};
-void mrowkaStart(struct mrowka m, int a, int b, enum ways w);
-void moveMrowka(struct mrowka m, wchar_t **mapa);
-void drawMrowka(struct mrowka m, wchar_t **mapa);
+int przesun_mrowke(wchar_t **mapa, int szerokosc, int wysokosc, int *x, int *y, char *kierunek);
 
 #endif //KOD_MROWKA_H
