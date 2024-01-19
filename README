@@ -11,4 +11,4 @@ Opis wszystkich flag wyświetlony po użyciu flagi -h:
 Jeżeli podano parametr -z, to parametry -w, -s, -c,-k są ignorowane
 Jeżeli podano parametr -c, to parametr -z jest ignorowany
 Przykładowe wywołanie programu: ./run -w 10 -s 10 -i 100 -k n -o stdout -c 50
-Program wygeneruje mapę o wymiarach 10x10, wykona 100 iteracji, mrówka będzie skierowana
+Program wygeneruje mapę o wymiarach 10x10, z 50 czazrnymi polami, wykona 100 iteracji, mrówka będzie skierowanan na północ, wypisze iteracje w terminalu
