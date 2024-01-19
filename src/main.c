@@ -139,16 +139,16 @@ int main(int argc, char **argv){
     }
 
     //test wczytania wszystkich parametrów
-    printf("Szerokość: %d\n", szerokosc);
-    printf("Wysokość: %d\n", wysokosc);
-    printf("Ilość iteracji: %d\n", iteracje);
-    printf("Kierunek: %c\n", kierunek);
-    printf("Wyjście: %c\n", wyjscie);
-    printf("Nazwa pliku wyjściowego: %s\n", nazwa_pliku_wyjsciowego);
-    printf("Plik mapy: %s\n", plik_mapy);
-    printf("Procent zapelnienia: %f\n", procent_zapelnienia);
-    printf("Ilość czarnych pól: %d\n", ilosc_czarnych);
-    printf("Mapa z pliku: %c\n", mapa_z_pliku);
+    //printf("Szerokość: %d\n", szerokosc);
+    //printf("Wysokość: %d\n", wysokosc);
+    //printf("Ilość iteracji: %d\n", iteracje);
+    //printf("Kierunek: %c\n", kierunek);
+    //printf("Wyjście: %c\n", wyjscie);
+    //printf("Nazwa pliku wyjściowego: %s\n", nazwa_pliku_wyjsciowego);
+    //printf("Plik mapy: %s\n", plik_mapy);
+    //printf("Procent zapelnienia: %f\n", procent_zapelnienia);
+    //printf("Ilość czarnych pól: %d\n", ilosc_czarnych);
+    //printf("Mapa z pliku: %c\n", mapa_z_pliku);
 
     //sprawdzenie paramtrów
 
@@ -176,15 +176,14 @@ int main(int argc, char **argv){
             mapa[mrowka_y][mrowka_x] = L' ';
         }
 
-        wypisz_mape_z_pliku(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
+        map_out(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek, 1, wyjscie, nazwa_pliku_wyjsciowego, 0);
         for (int i = 0; i < iteracje; i++){
           if (przesun_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek) == 1){
               printf("Mrowka wyszla poza mape - koniec programu\n");
               return 0;
           }
-        wypisz_mape_z_pliku(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
-    }
-
+        map_out(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek, 1, wyjscie, nazwa_pliku_wyjsciowego, i+1);
+        }
     } else if (szerokosc != 0 && wysokosc != 0  ){
         szerokosc += 2; //+2 na krawędzie
         wysokosc += 2;
@@ -201,13 +200,13 @@ int main(int argc, char **argv){
         mrowka_x = szerokosc/2;
         mrowka_y = wysokosc/2;
 
-        wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
+        map_out(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek, 0, wyjscie, nazwa_pliku_wyjsciowego, 0);
         for (int i = 0; i < iteracje; i++){
             if (przesun_mrowke(mapa, szerokosc, wysokosc, &mrowka_x, &mrowka_y, &kierunek) == 1){
                 printf("Mrowka wyszla poza mape - koniec programu\n");
                 return 0;
             }
-        wypisz_mape(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek);
+        map_out(mapa, szerokosc, wysokosc, mrowka_x, mrowka_y, kierunek, 0, wyjscie, nazwa_pliku_wyjsciowego, i+1);
         }
     } else{
         printf("Nie podano wymiarów mapy - koniec działania programu\n");

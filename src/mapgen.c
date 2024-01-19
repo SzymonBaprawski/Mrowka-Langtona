@@ -34,7 +34,7 @@ void zapelniacz(wchar_t **mapa, int szerokosc, int wysokosc, int ilosc_czarnych)
     //generator liczb losowych
     srand(time(NULL));
 
-    printf("Ilość czarnych pól: %d\n", ilosc_czarnych);
+    //printf("Ilość czarnych pól: %d\n", ilosc_czarnych);
 
     //zapelnianie mapy czarnymi polami
     while(ilosc_czarnych > 0){
